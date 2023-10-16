@@ -1,10 +1,10 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .models import Importacion,Resultado
+from .models import Importacion, Resultado
 
+# Esta vista recupera todas las importaciones y sus resultados relacionados.
 def importacionesData(request):
     importaciones = Importacion.objects.all()
-    
     data = {'importaciones': importaciones}
     
     for imp in importaciones:
@@ -15,11 +15,11 @@ def importacionesData(request):
             resultado = resultados[0]  # Suponemos que solo hay un resultado por importación
             imp.resultado = resultado
         else:
-            # Puedes manejar este caso si no hay resultados
             pass
-    
     return render(request, 'listar-importaciones.html', data)
 
+
+# POS.get : está tomando el valor del campo "codigo_articulo" de un formulario enviado por POST, y luego lo convierte en un número entero.
 def agregarImportacion(request):
     if request.method == "POST":
         # Obtener los datos del formulario
@@ -30,7 +30,7 @@ def agregarImportacion(request):
         proveedor = request.POST.get("proveedor")
         costo_envio = request.POST.get("costo_envio")
 
-        # Crear una nueva instancia de Importacion
+        # Se crea una nueva instancia de Importacion
         importacion = Importacion(
             nombre_articulo=nombre_articulo,
             cantidad_unidades=cantidad_unidades,
@@ -39,17 +39,14 @@ def agregarImportacion(request):
             proveedor=proveedor,
             costo_envio=costo_envio,
         )
+         # Se guarda la instancia en la base de datos.
         importacion.save()  # Guardar la instancia de Importacion en la base de datos
 
-        # Calcular impuestos y resultados
         total_pedido = cantidad_unidades * costo_unitario
         resultado = calcular_impuestos_y_resultado(total_pedido, costo_envio)
-
-        # Asignar la Importacion a la instancia de Resultado
-        resultado.importacion = importacion
+        resultado.importacion = importacion # Se vincula el resultado con la importación.
         resultado.save()  # Guardar la instancia de Resultado en la base de datos
-
-        # Redirigir al usuario a la página de resultados
+        # Se Redirige al usuario a la página de resultados
         return redirect('resultado_parcial',resultado_id=resultado.id)
     return render(request, 'agregar-importacion.html')
 
@@ -86,6 +83,8 @@ def calcular_impuestos_y_resultado(total_pedido, costo_envio):
         total_compra_usd=total_compra_usd,
     )
     return resultado
+
+
 def guardar_resultado(request):
     if request.method == "POST":
         # Obtener los datos del formulario
@@ -99,6 +98,7 @@ def guardar_resultado(request):
         total_pedido = cantidad_unidades * costo_unitario
         resultado = calcular_impuestos_y_resultado(total_pedido, costo_envio)
 
+
 def ver_resultado(request, resultado_id):
     resultado = Resultado.objects.get(id=resultado_id)
     importacion = resultado.importacion
@@ -106,6 +106,8 @@ def ver_resultado(request, resultado_id):
                'importacion':importacion
                }
     return render(request, 'resultado-parcial.html', context)
+    
+    
 
 def detalle_importacion(request, imp_id):
     importacion = get_object_or_404(Importacion, id=imp_id)
@@ -121,4 +123,3 @@ def detalle_importacion(request, imp_id):
         'resultado': resultado
     }
     return render(request, 'resultado-parcial.html', context)
-
