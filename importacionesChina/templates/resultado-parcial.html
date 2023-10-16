@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Resultados de Importación</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    </script>
+    <style>
+        .full-height {
+            min-height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    {% load static %}
+    <div>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="{% static 'img/furgon.png' %}" alt="Furgon" width="30" height="24" class="align-text-top">
+                    <img src="{% static 'img/paquete.png' %}" alt="Paquete" width="30" height="24" class="align-text-top">
+                    Lista de importaciones
+                    <a href="{% url 'listar_importaciones' %}" class="btn btn-light">Volver al menu</a>
+                </a>
+            </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center full-height my-5">
+        <div class="card" style="width: 18rem;">
+            {% load static %}
+            <img src="{% static 'img/delivery.png' %}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Resultado de la importación</h5>
+                <p class="card-text">Nombre del artículo: {{ importacion.nombre_articulo }}</p>
+                <p class="card-text">Cantidad de unidades: {{ importacion.cantidad_unidades }}</p>
+                <p class="card-text">Total pedido: {{ resultado.total_pedido }}</p>
+                <p class="card-text">Costo de envío en CLP: {{ resultado.costo_envio }}</p>
+                <p class="card-text">Tasa de Aduana: {{ resultado.tasa_aduana }}</p>
+                <p class="card-text">Total de Impuestos: {{ resultado.total_impuestos }}</p>
+                <p class="card-text">Costo Total en CLP: {{ resultado.total_compra_clp }}</p>
+                <p class="card-text">Costo Total en USD: {{ resultado.total_compra_usd }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

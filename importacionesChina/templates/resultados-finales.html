@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultados de Importación</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
+</head>
+<body>
+    {% load static %}
+<div class="container mt-2">
+    <div>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'img/furgon.png' %}" alt="Furgon" width="30" height="24" class="align-text-top">
+                <img src="{% static 'img/paquete.png' %}" alt="Paquete" width="30" height="24" class="align-text-top">
+                Lista de importaciones
+                <a href="{% url 'listar_importaciones' %}" class="btn btn-light">Volver al menu</a>
+
+            </a>
+            <div class="ml-auto">
+                <a href="{% url 'agregar-importacion' %}" class="btn btn-light">Agregar importacion</a>
+            </div>
+        </nav>
+    </div>
+    <table id="resultado-table" class="display">
+        <thead>
+            <tr>
+                <th>ID Resultado</th>
+                <th>ID Importación</th>
+                <th>Total del Pedido (CLP)</th>
+                <th>Costo de Envío (CLP)</th>
+                <th>6% Tasa de Aduana (CLP)</th>
+                <th>19% IVA (CLP)</th>
+                <th>Total de Impuesto y Aduana (CLP)</th>
+                <th>Costo Total de Compra (CLP)</th>
+                <th>Costo Total de Compra (USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resultado in resultados %}
+                <tr>
+                    <td>{{ resultado.id }}</td>
+                    <td>{{ resultado.importacion.id }}</td>
+                    <td>{{ resultado.total_pedido }}</td>
+                    <td>{{ resultado.costo_envio }}</td>
+                    <td>{{ resultado.tasa_aduana }}</td>
+                    <td>{{ resultado.iva }}</td>
+                    <td>{{ resultado.total_impuestos }}</td>
+                    <td>{{ resultado.total_compra_clp }}</td>
+                    <td>{{ resultado.total_compra_usd }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#resultado-table').DataTable();
+        });
+    </script>
+</div>
+</body>
+</html>

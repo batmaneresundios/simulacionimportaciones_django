@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Listado de importaciones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
+</head>
+
+<body>
+    {% load static %}
+    <div class="container mt-2"> 
+        <div>
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <a class="navbar-brand" href="#">
+                    <img src="{% static 'img/furgon.png' %}" alt="Furgon" width="30" height="24" class="align-text-top">
+                    <img src="{% static 'img/paquete.png' %}" alt="Paquete" width="30" height="24" class="align-text-top">
+                    Lista de importaciones
+                </a>
+                <div class="ml-auto">
+                    <a href="agregarform" class="btn btn-light">Crear importación</a>
+                    <a href="resultados_finales" class="btn btn-light">Ver todas las importaciones</a>
+                </div>
+            </nav>
+        </div>
+            <table id="tbl_importaciones" class="display">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cantidad</th>
+                        <th>Costo Unitario</th>
+                        <th>Nombre artículo</th>
+                        <th>Código artículo</th>
+                        <th>Nombre proveedor</th>
+                        <th>Costo Total Compra USD</th>
+                        <th>Costo Total Compra CLP</th>
+                        <th>Detalle de la importación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for imp in importaciones %}
+                        <tr>
+                            <td>{{ imp.id }}</td>
+                            <td>{{ imp.cantidad_unidades }}</td>
+                            <td>{{ imp.costo_unitario }}</td>
+                            <td>{{ imp.nombre_articulo }}</td>
+                            <td>{{ imp.codigo_articulo }}</td>
+                            <td>{{ imp.proveedor }}</td>
+                            <td>{{ imp.resultado.total_compra_usd }}</td>
+                            <td>{{ imp.resultado.total_compra_clp }}</td>
+                            <td><a href="{% url 'detalle_importacion' imp.id %}" class="btn btn-secondary">Ver detalle</a></td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="9">
+                                <div class="alert alert-info">No hay importaciones</div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#tbl_importaciones').DataTable();
+            });
+        </script>        
+    </div>
+</body>
+</html>
